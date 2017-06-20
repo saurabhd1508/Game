@@ -1,0 +1,38 @@
+String FileName = "D:\\100rabh\\Others\\Development\\GitWorkSpaces\\Games\\resources\\properties\\input.txt";
+		
+		FileReader fr = null;
+		BufferedReader br = null;
+		try{
+			fr = new FileReader(FileName);
+			br = new BufferedReader(fr);
+			
+			String currentLine;
+			
+			br = new BufferedReader(new FileReader(FileName));
+			
+			while((currentLine = br.readLine()) != null)
+			{
+				System.out.println("Current Line is "+currentLine);
+			}
+		}
+		catch (IOException e) {
+
+			e.printStackTrace();
+
+		} finally {
+
+			try {
+
+				if (br != null)
+					br.close();
+
+				if (fr != null)
+					fr.close();
+
+			} catch (IOException ex) {
+
+				ex.printStackTrace();
+
+			}
+
+		}
