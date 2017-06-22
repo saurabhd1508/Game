@@ -25,72 +25,103 @@ public class Game {
 		
 		int totalOvers = sc.nextInt();
 		sc.close();
-		int ballsInOver=0,runsInOver=0, runInNum=0, extrasInOver=0, totalExtras=0, legByes=0, byes=0, noBallRuns=0, wideRuns=0, wickets=0;
-		
+		int currentBall=1,totalBallsInOver=0,currentOver=0, runsInOver=0, runCharToNum=0, extrasInOver=0, totalExtras=0, legByes=0, byes=0, noBallRuns=0, wideRuns=0, wickets=0;
+		int bRun= 0;
 		for(int j=1;j<=totalOvers;j++)
 		{
+			currentBall=1;
 			System.out.println("\n***  Over  "+j+"  ***\n");
 			for(int i=1;i<=6;i++)
 			{
-				ballsInOver++;
 				char run = getRun();
 				
 				if(run=='N')
 				{
-					System.out.println("Ohh...!!! Its a NO ball, you need to ball again...");
+					System.out.println(currentOver+"."+(currentBall)+" - "+run+" - NO ball...");
+					//System.out.println("NO ball...");
 					//i=i-1;
 					//ballsInOver--;
 					noBallRuns++;
-					extrasInOver++;
-					run=getRun();
+					//extrasInOver = extrasInOver+1;;
+					//run=getRun();
+					totalBallsInOver=currentBall;
+					currentBall++;
+					i--;
 				}else if(run=='W')
 				{
-					System.out.println("Ohh...!!! Its a WIDE ball, you need to ball again...");
+					System.out.println(currentOver+"."+(currentBall)+" - "+run+" - WIDE ball...");
+					//System.out.println("WIDE ball...");
 					//i=i-1;
 					//ballsInOver--;
 					wideRuns++;
-					extrasInOver++;
-					run=getRun();
+					//extrasInOver = extrasInOver+1;
+					//run=getRun();
+					totalBallsInOver=currentBall;
+					currentBall++;
+					i--;
 				}else if(run=='B')
 				{
-					byes++;
-					extrasInOver++;
+					bRun=  calculateByesRuns();
+					System.out.println(currentOver+"."+currentBall+" - "+bRun+" - Byes...");
+					byes = byes+bRun;
+					//extrasInOver = extrasInOver+byes;
+					totalBallsInOver=currentBall;
+					currentBall++;
 				}else if(run=='L')
 				{
-					legByes++;
-					extrasInOver++;
+					//int bRun= 0;
+					bRun=  calculateByesRuns();
+					System.out.println(currentOver+"."+currentBall+" - "+bRun+" - Leg Byes...");
+					totalBallsInOver=currentBall;
+					currentBall++;
+					legByes = legByes + bRun;
+					//extrasInOver = extrasInOver + legByes;
 				}
 				else if(run=='O')
 				{
+					System.out.println(currentOver+"."+currentBall+" - OUT...!!!");
+					totalBallsInOver=currentBall;
+					currentBall++;
 					wickets++;
-					System.out.println("Ohh...!!! Its OUT");
+					//System.out.println("OUT");
 				}
 				else
 				{
-					runInNum = Character.getNumericValue(run);
+					runCharToNum = Character.getNumericValue(run);
 					//System.out.println("Run in num = "+runInNum);
-					runsInOver = runsInOver + runInNum;
+					
+					System.out.println(currentOver+"."+currentBall+" - "+runCharToNum+" Runs");
+					totalBallsInOver=currentBall;
+					currentBall++;
+					runsInOver = runsInOver + runCharToNum;
 				}
 			}
-			System.out.println("Total Balls played in a over "+ballsInOver);
+			extrasInOver = byes+legByes+wideRuns+noBallRuns;
+			System.out.println("\nTotal Balls played in a over "+totalBallsInOver);
 			System.out.println("\nTotal Extras - "+extrasInOver +" (Byes - "+byes+", LegByes - "+legByes+", Wide - "+wideRuns+", No - "+noBallRuns+")");
-			System.out.println("\nTotal Runs "+runsInOver);
+			System.out.println("\nAfter "+(currentOver+1)+" over total runs - "+runsInOver);
 			runsInOver = runsInOver+extrasInOver;
-			System.out.println("\nTotal Runs with extras in "+j+" over "+runsInOver);
-			System.out.println("Total Wickets in a over "+wickets);
-			
+			System.out.println("\nAfter "+j+" over total runs with extras - "+runsInOver);
+			currentOver = currentOver+1;
 		}
+		System.out.println("Total Wickets "+wickets);
+	}
+	
+	public int calculateByesRuns()
+	{
+		Random r = new Random();
+		
+		int byesRun = r.nextInt((6-1)+1)+1;
+		//System.out.println("Byes Runs are - "+byesRun);
+		return byesRun;
 	}
 	public char getRun()
 	{
 		String possibleRuns = "0123456NOWBL";
 		int min = 0,max = 11;
 		
-		//max = possibleRuns.length()-1;
-		//System.out.println("min "+min+" max "+max);
-		
 		char[] pr = possibleRuns.toCharArray(); 
-		//int len = possibleRuns.length();
+		
 		char run;
 		Random r = new Random();
 		//int run = minRun + (int)(Math.random() * ((maxRun - minRun) + 1));
@@ -101,7 +132,6 @@ public class Game {
 		//run = (possibleRuns.charAt(r.nextInt(len)));
 		
 		run = pr[pos];
-		System.out.println("Run - "+run);
 		return run;
 	}
 	public static void main(String[] args) throws IOException
